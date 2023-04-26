@@ -8,11 +8,21 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import { Link } from "react-router-dom";
 import logo1 from "../static/images/Logo1.jpg";
 
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../redux/userSlice";
+import { emptyCart } from "../redux/cartSlice";
+
 function NavMain() {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user);
+  const cart = useSelector((state) => state.cart);
+  console.log(user);
+  console.log(cart.cart.length);
+
   return (
     <Navbar bg="light" expand="lg">
       <Container fluid>
-        <Navbar.Brand as={Link} to="/">
+        <Navbar.Brand as={Link} to="/home">
           <div>
             <img
               src={logo1}
@@ -69,15 +79,19 @@ function NavMain() {
               <NavDropdown.Item href="#action4">Profile</NavDropdown.Item>
 
               {"userstate" ? (
-                <NavDropdown.Item as={Link} to="/login">
+                <NavDropdown.Item
+                  as={Link}
+                  to="/login"
+                  onClick={() => {
+                    dispatch(logout());
+                    dispatch(emptyCart());
+                  }}
+                >
                   Logout
                 </NavDropdown.Item>
               ) : null}
             </NavDropdown>
-            <h6>
-              {"userstate" ? (true ? "Mr " : "Mrs ") : null}
-              {"userstate" ? "Venkata Rao Ch" : ""}
-            </h6>
+            <h6>{user ? user.name : null}</h6>
           </div>
           <Nav.Link href="#action2">
             <Button
@@ -109,7 +123,7 @@ function NavMain() {
                   transform: "translate(25%, 25%)",
                 }}
               >
-                {0}
+                {cart.cart.length - 1}
               </div>
             </Button>
           </Nav.Link>

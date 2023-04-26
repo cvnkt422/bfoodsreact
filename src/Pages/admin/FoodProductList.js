@@ -1,18 +1,8 @@
 import React, { useState, useEffect } from "react";
 import FoodProduct from "./FoodProduct";
-import {
-  Form,
-  Button,
-  Row,
-  Col,
-  Container,
-  Table,
-  Nav,
-  Navbar,
-} from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Button, Container, Nav, Navbar } from "react-bootstrap";
 
-import { axiosservice, fetchCategories } from "../../service/axiosService";
+import { axiosservice } from "../../service/axiosService";
 import ProductItem from "./ProductItem";
 import ViewProduct from "../ViewProduct";
 
@@ -23,7 +13,6 @@ function FoodProductList(props) {
 
   const [selprod, setSelprod] = useState({});
 
-  const [activeindex, setActiveindex] = useState();
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [filteredproducts, setFilteredproducts] = useState([]);
@@ -46,7 +35,9 @@ function FoodProductList(props) {
   };
 
   const filterProducts = async (id) => {
-    setFilteredproducts(products.filter((product) => product.category === +id));
+    setFilteredproducts(
+      products.filter((product) => product.category === +id || id === "all")
+    );
     updatePages(true, false, false);
   };
 
@@ -61,8 +52,10 @@ function FoodProductList(props) {
           <div className="d-flex flex-column">
             <Navbar bg="light" expand="lg">
               <Container fluid>
-                <Nav defaultActiveKey="/home" className="flex-column">
-                  <Nav.Link href="/home">All Items</Nav.Link>
+                <Nav className="flex-column">
+                  <Nav.Link onClick={(e) => filterProducts("all")}>
+                    All Items
+                  </Nav.Link>
 
                   {categories &&
                     categories.map((cat, index) => (

@@ -9,9 +9,14 @@ import gmail from "../static/images/gmail.jpg";
 import facebook from "../static/images/facebook.jpg";
 import { axiosservice } from "../service/axiosService";
 
+import { useDispatch } from "react-redux";
+
+import { login } from "../redux/userSlice";
+
 import Error from "../errors/error";
 
 export default function Login() {
+  const dispatch = useDispatch();
   let navigate = useNavigate();
   const [form, setForm] = useState({});
   const [errors, setErros] = useState({});
@@ -32,6 +37,8 @@ export default function Login() {
       const auth = await axiosservice("POST", "authentication/", form);
       console.log(typeof auth.status, auth.status);
       if (auth.status === 202) {
+        console.log(auth.data);
+        dispatch(login(auth.data));
         navigate("/home");
       } else {
         console.log("error");
@@ -46,7 +53,7 @@ export default function Login() {
     const { email, password } = form;
 
     const emailValidator =
-      '/^(([^<>()[]\\.,;:s@"]+(.[^<>()[]\\.,;:s@"]+)*)|(".+"))@(([[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}])|(([a-zA-Z-0-9]+.)+[a-zA-Z]{2,}))$/';
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     if (!email || email === "" || !emailValidator.test(email))
       newErrors.email = "Enter Valid Email";
@@ -86,6 +93,16 @@ export default function Login() {
                   <Form.Label>
                     Email
                     <span style={{ color: "red", fontSize: "15px" }}>*</span>
+                  </Form.Label>
+                  <Form.Label className="float-end">
+                    Don't have Account?
+                    <a
+                      href="/adduser"
+                      style={{ color: "green", fontSize: "1rem" }}
+                    >
+                      {" "}
+                      Signup{" "}
+                    </a>
                   </Form.Label>
                   <Form.Control
                     type="text"

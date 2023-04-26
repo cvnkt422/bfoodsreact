@@ -1,9 +1,16 @@
 import React from "react";
 import { Row, Container, Col, Button } from "react-bootstrap";
 
+import { useDispatch } from "react-redux";
+
+import { addCart } from "../redux/cartSlice";
+
 function ViewProduct(props) {
+  const dispatch = useDispatch();
+
   const addToCart = () => {
     console.log("addtocart clicked");
+    dispatch(addCart(props.prod));
   };
 
   const deleteFromCart = () => {
