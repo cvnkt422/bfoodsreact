@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import Alert from "react-bootstrap/Alert";
-import Modal from "react-bootstrap/Modal";
-import { useNavigate, Link, json } from "react-router-dom";
+
+import { useNavigate, Link } from "react-router-dom";
 
 import { Form, Button, Row, Col, Container } from "react-bootstrap";
 
@@ -11,11 +10,8 @@ import facebook from "../static/images/facebook.jpg";
 import { axiosservice } from "../service/axiosService";
 
 import Error from "../errors/error";
-import { useDispatch } from "react-redux";
-import { actions } from "../redux/store";
 
 export default function Login() {
-  const dispatch = useDispatch();
   let navigate = useNavigate();
   const [form, setForm] = useState({});
   const [errors, setErros] = useState({});
@@ -36,7 +32,6 @@ export default function Login() {
       const auth = await axiosservice("POST", "authentication/", form);
       console.log(typeof auth.status, auth.status);
       if (auth.status === 202) {
-        dispatch(actions.login(auth.data));
         navigate("/home");
       } else {
         console.log("error");
@@ -51,7 +46,7 @@ export default function Login() {
     const { email, password } = form;
 
     const emailValidator =
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      '/^(([^<>()[]\\.,;:s@"]+(.[^<>()[]\\.,;:s@"]+)*)|(".+"))@(([[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}])|(([a-zA-Z-0-9]+.)+[a-zA-Z]{2,}))$/';
 
     if (!email || email === "" || !emailValidator.test(email))
       newErrors.email = "Enter Valid Email";
@@ -72,7 +67,11 @@ export default function Login() {
 
       <div className="d-flex bd-highlight">
         <div className="flex-fill bd-highlight mx-4">
-          <img src={logo1} style={{ width: "500px", height: "500px" }}></img>
+          <img
+            src={logo1}
+            alt="logo1"
+            style={{ width: "500px", height: "500px" }}
+          ></img>
         </div>
         <div
           className="flex-fill bd-highlight align-self-center"
@@ -195,11 +194,11 @@ export default function Login() {
         <div className="flex-fill bd-highlight align-self-center">
           <div className="d-flex flex-column">
             <div className="btn btn-sm">
-              <img src={gmail} />
+              <img src={gmail} alt="gmail" />
             </div>
 
             <div className="btn btn-sm">
-              <img src={facebook} />
+              <img src={facebook} alt="facebook" />
             </div>
           </div>
         </div>

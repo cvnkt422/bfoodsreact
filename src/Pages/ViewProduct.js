@@ -1,18 +1,13 @@
 import React from "react";
 import { Row, Container, Col, Button } from "react-bootstrap";
-import { useDispatch } from "react-redux";
-import { actions } from "../redux/store";
-function ViewProduct(props) {
-  const dispatch = useDispatch();
 
+function ViewProduct(props) {
   const addToCart = () => {
     console.log("addtocart clicked");
-    dispatch(actions.increment());
   };
 
   const deleteFromCart = () => {
     console.log("Removed from Cart");
-    dispatch(actions.decrement());
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
@@ -7,25 +7,16 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { Link } from "react-router-dom";
 import logo1 from "../static/images/Logo1.jpg";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { actions } from "../redux/store";
 
 function NavMain() {
-  const cartCount = useSelector((state) => state.cartCount);
-  const userstate = useSelector((state) => state.user);
-  const dispatch = useDispatch();
-
-  const [user, setUser] = useState(userstate);
-
   return (
     <Navbar bg="light" expand="lg">
       <Container fluid>
         <Navbar.Brand as={Link} to="/">
           <div>
-            {" "}
             <img
               src={logo1}
+              alt="logo1"
               className="img-fluid"
               style={{ width: "200px", height: "100px" }}
             />
@@ -70,30 +61,22 @@ function NavMain() {
           </Form>
           <div className="mx-4">
             <NavDropdown title="Account" id="navbarScrollingDropdown">
-              {userstate ? null : (
+              {"userstate" ? null : (
                 <NavDropdown.Item as={Link} to="/login">
                   Login
                 </NavDropdown.Item>
               )}
               <NavDropdown.Item href="#action4">Profile</NavDropdown.Item>
 
-              {userstate ? (
-                <NavDropdown.Item
-                  as={Link}
-                  to="/login"
-                  onClick={() => dispatch(actions.logout())}
-                >
+              {"userstate" ? (
+                <NavDropdown.Item as={Link} to="/login">
                   Logout
                 </NavDropdown.Item>
               ) : null}
             </NavDropdown>
             <h6>
-              {userstate
-                ? userstate.gender === "Male"
-                  ? "Mr "
-                  : "Mrs "
-                : null}
-              {userstate ? userstate.name : ""}
+              {"userstate" ? (true ? "Mr " : "Mrs ") : null}
+              {"userstate" ? "Venkata Rao Ch" : ""}
             </h6>
           </div>
           <Nav.Link href="#action2">
@@ -126,7 +109,7 @@ function NavMain() {
                   transform: "translate(25%, 25%)",
                 }}
               >
-                {cartCount}
+                {0}
               </div>
             </Button>
           </Nav.Link>
