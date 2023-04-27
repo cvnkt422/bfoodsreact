@@ -10,14 +10,15 @@ import logo1 from "../static/images/Logo1.jpg";
 
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../redux/userSlice";
-import { emptyCart } from "../redux/cartSlice";
+import { removeCart, emptyCart } from "../redux/cartSlice";
+import Cart from "../Pages/Cart";
 
 function NavMain() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const cart = useSelector((state) => state.cart);
   console.log(user);
-  console.log(cart.cart.length);
+  console.log(cart);
 
   return (
     <Navbar bg="light" expand="lg">
@@ -93,7 +94,7 @@ function NavMain() {
             </NavDropdown>
             <h6>{user ? user.name : null}</h6>
           </div>
-          <Nav.Link href="#action2">
+          {/* <Nav.Link href="#action2">
             <Button
               style={{
                 width: "3em",
@@ -123,9 +124,12 @@ function NavMain() {
                   transform: "translate(25%, 25%)",
                 }}
               >
-                {cart.cart.length - 1}
+                {cart.totalQuantity}
               </div>
             </Button>
+          </Nav.Link> */}
+          <Nav.Link>
+            <Cart />
           </Nav.Link>
         </Navbar.Collapse>
       </Container>

@@ -35,6 +35,7 @@ export default function Login() {
     if (Object.keys(formErros).length > 0) setErros(formErros);
     else {
       const auth = await axiosservice("POST", "authentication/", form);
+
       console.log(typeof auth.status, auth.status);
       if (auth.status === 202) {
         console.log(auth.data);

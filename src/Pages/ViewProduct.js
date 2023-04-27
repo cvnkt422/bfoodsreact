@@ -3,18 +3,19 @@ import { Row, Container, Col, Button } from "react-bootstrap";
 
 import { useDispatch } from "react-redux";
 
-import { addCart } from "../redux/cartSlice";
+import { addCart, removeCart } from "../redux/cartSlice";
 
 function ViewProduct(props) {
   const dispatch = useDispatch();
 
   const addToCart = () => {
     console.log("addtocart clicked");
-    dispatch(addCart(props.prod));
+    dispatch(addCart(props.prod[0]));
   };
 
   const deleteFromCart = () => {
     console.log("Removed from Cart");
+    dispatch(removeCart(props.prod[0]));
   };
 
   return (
@@ -53,11 +54,11 @@ function ViewProduct(props) {
               </span>
             </h5>
             <div className="d-flex justify-content-center mt-4">
-              <Button className="mx-2" onClick={addToCart}>
+              <Button className="mx-2 btn-success" onClick={addToCart}>
                 Add to Cart
               </Button>
-              <Button className="mx-2" onClick={deleteFromCart}>
-                Place Order{" "}
+              <Button className="mx-2 btn-danger" onClick={deleteFromCart}>
+                Remove
               </Button>
             </div>
             <div

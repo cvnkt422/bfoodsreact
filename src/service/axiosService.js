@@ -19,6 +19,7 @@ const axiosservice = async (method, path, data) => {
       response = error.response;
     } else if (error.request) {
       response = error.request;
+      response.status = 404;
       console.log("printing error request", error);
     } else {
       response.data = "not_found";
