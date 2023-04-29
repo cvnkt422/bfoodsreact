@@ -40,8 +40,25 @@ export const cartSlice = createSlice({
       }
       console.log(newItem);
     },
-    removeCart: (state) => {
-      state.cart = [{}];
+    removeCart: (state, action) => {
+      const newItem = action.payload;
+      //Find index of specific object using findIndex method.
+      const objIndex = state.cart.findIndex((obj) => obj.id === newItem.id);
+
+      if (objIndex !== -1) {
+        console.log("Before update: ", [objIndex]);
+
+        if (state.cart[objIndex].quantity !== -1) {
+          state.cart[objIndex].quantity--;
+          state.cart[objIndex].totalItemPrice =
+            state.cart[objIndex].totalItemPrice - newItem.price;
+          state.totalQuantity--;
+          state.totalCartPrice = state.totalCartPrice - newItem.price;
+          if (state.cart[objIndex].quantity === 0) {
+            state.cart.splice(objIndex, 1);
+          }
+        }
+      }
     },
     emptyCart: (state) => {
       state.cart = null;

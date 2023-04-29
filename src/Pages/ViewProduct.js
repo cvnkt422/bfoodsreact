@@ -1,12 +1,25 @@
-import React from "react";
-import { Row, Container, Col, Button } from "react-bootstrap";
+import React, { useState } from "react";
+import { Row, Container, Col, Button, Alert } from "react-bootstrap";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { addCart, removeCart } from "../redux/cartSlice";
 
 function ViewProduct(props) {
   const dispatch = useDispatch();
+  const [btnState, setBtnState] = useState(true);
+  const cart = useSelector((state) => state.cart);
+  if (
+    cart.cart.find((item) => item.id === props.prod[0].id) !== undefined &&
+    btnState
+  )
+    setBtnState(false);
+
+  if (
+    cart.cart.find((item) => item.id === props.prod[0].id) === undefined &&
+    !btnState
+  )
+    setBtnState(true);
 
   const addToCart = () => {
     console.log("addtocart clicked");
@@ -54,18 +67,29 @@ function ViewProduct(props) {
               </span>
             </h5>
             <div className="d-flex justify-content-center mt-4">
-              <Button className="mx-2 btn-success" onClick={addToCart}>
-                Add to Cart
-              </Button>
-              <Button className="mx-2 btn-danger" onClick={deleteFromCart}>
+              <div>
+                <Button variant="outline-success" size="sm" onClick={addToCart}>
+                  Add to Cart
+                </Button>
+              </div>
+              <Button
+                variant="outline-danger"
+                size="sm"
+                className="mx-2"
+                onClick={deleteFromCart}
+                disabled={btnState}
+              >
                 Remove
               </Button>
             </div>
+
             <div
               className="mt-2 d-flex justify-content-center"
               onClick={(e) => props.updatePages(true, false, false)}
             >
-              <Button>Back to Products</Button>
+              <Button variant="outline-primary" size="sm">
+                Back to Products
+              </Button>
             </div>
           </div>
         </Col>

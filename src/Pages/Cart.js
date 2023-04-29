@@ -49,7 +49,13 @@ export default function Cart() {
         </div>
       </Button>
 
-      <Offcanvas show={show} onHide={handleClose} placement="end" name="end">
+      <Offcanvas
+        show={show}
+        onHide={handleClose}
+        placement="end"
+        name="end"
+        style={{ width: "500px" }}
+      >
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>Cart Items</Offcanvas.Title>
         </Offcanvas.Header>
@@ -63,6 +69,9 @@ export default function Cart() {
               Total {formatCurrency(cart.totalCartPrice)}
             </div>
           </Stack>
+          <Button variant="outline-success" size="sm">
+            Proceed to Check Out
+          </Button>
         </Offcanvas.Body>
       </Offcanvas>
     </>
