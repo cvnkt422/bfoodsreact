@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
@@ -10,18 +10,39 @@ import logo1 from "../static/images/Logo1.jpg";
 
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../redux/userSlice";
-import { removeCart, emptyCart } from "../redux/cartSlice";
+import { removeCart, emptyCart, filterProducts } from "../redux/cartSlice";
 import Cart from "../Pages/Cart";
+import { axiosservice } from "../service/axiosService";
 
 function NavMain() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const cart = useSelector((state) => state.cart);
+  const isLoggedin = useSelector((state) => state.user.isLoggedin);
+  const [searchTag, setSearchTag] = useState("");
+
   console.log(user);
   console.log(cart);
 
+  const prodSearch = async () => {
+    console.log(searchTag);
+    const products = await axiosservice("POST", "admin/searchProducts/", {
+      searchTag: searchTag,
+    });
+
+    console.log(products.data);
+    // if (auth.status === 202) {
+    //  console.log(auth.data);
+    // dispatch(login(auth.data));
+    //navigate("/home");
+    // } else {
+    // console.log("error");
+    //setShowerror(true);
+    //}
+  };
+
   return (
-    <Navbar bg="light" expand="lg">
+    <Navbar expand="lg" style={{ backgroundColor: "white" }}>
       <Container fluid>
         <Navbar.Brand as={Link} to="/home">
           <div>
@@ -40,10 +61,14 @@ function NavMain() {
             style={{ maxHeight: "100px" }}
             navbarScroll
           >
-            <Nav.Link as={Link} to="/home">
+            <Nav.Link
+              as={Link}
+              to="/home"
+              onClick={(e) => dispatch(filterProducts())}
+            >
               Home
             </Nav.Link>
-            <Nav.Link href="#action2">Food Items</Nav.Link>
+
             <NavDropdown title="Orders" id="navbarScrollingDropdown">
               <NavDropdown.Item href="#action3">All Orders</NavDropdown.Item>
               <NavDropdown.Divider />
@@ -67,19 +92,24 @@ function NavMain() {
               placeholder="Search Food Items"
               className="me-2"
               aria-label="Search"
+              value={searchTag}
+              onChange={(e) => setSearchTag(e.target.value)}
             />
-            <Button variant="outline-success">Search</Button>
+            <Button variant="outline-success" onClick={prodSearch}>
+              Search
+            </Button>
           </Form>
           <div className="mx-4">
             <NavDropdown title="Account" id="navbarScrollingDropdown">
-              {"userstate" ? null : (
+              {!isLoggedin && (
                 <NavDropdown.Item as={Link} to="/login">
                   Login
                 </NavDropdown.Item>
               )}
-              <NavDropdown.Item href="#action4">Profile</NavDropdown.Item>
-
-              {"userstate" ? (
+              {isLoggedin && (
+                <NavDropdown.Item href="#action4">Profile</NavDropdown.Item>
+              )}
+              {isLoggedin && (
                 <NavDropdown.Item
                   as={Link}
                   to="/login"
@@ -90,44 +120,11 @@ function NavMain() {
                 >
                   Logout
                 </NavDropdown.Item>
-              ) : null}
+              )}
             </NavDropdown>
             <h6>{user ? user.name : null}</h6>
           </div>
-          {/* <Nav.Link href="#action2">
-            <Button
-              style={{
-                width: "3em",
-                height: "3rem",
-                position: "relative",
-              }}
-              variant="outline-primary"
-              className="rounded-circle mx-2"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 576 512"
-                fill="currentColor"
-              >
-                <path d="M96 0C107.5 0 117.4 8.19 119.6 19.51L121.1 32H541.8C562.1 32 578.3 52.25 572.6 72.66L518.6 264.7C514.7 278.5 502.1 288 487.8 288H170.7L179.9 336H488C501.3 336 512 346.7 512 360C512 373.3 501.3 384 488 384H159.1C148.5 384 138.6 375.8 136.4 364.5L76.14 48H24C10.75 48 0 37.25 0 24C0 10.75 10.75 0 24 0H96zM128 464C128 437.5 149.5 416 176 416C202.5 416 224 437.5 224 464C224 490.5 202.5 512 176 512C149.5 512 128 490.5 128 464zM512 464C512 490.5 490.5 512 464 512C437.5 512 416 490.5 416 464C416 437.5 437.5 416 464 416C490.5 416 512 437.5 512 464z" />
-              </svg>
 
-              <div
-                className="rounded-circle bg-danger d-flex justify-content-center align-items-center"
-                style={{
-                  color: "white",
-                  width: "1.5rem",
-                  height: "1.5rem",
-                  position: "absolute",
-                  bottom: 0,
-                  right: 0,
-                  transform: "translate(25%, 25%)",
-                }}
-              >
-                {cart.totalQuantity}
-              </div>
-            </Button>
-          </Nav.Link> */}
           <Nav.Link>
             <Cart />
           </Nav.Link>

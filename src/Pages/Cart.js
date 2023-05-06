@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import { Button, Stack } from "react-bootstrap";
 import Offcanvas from "react-bootstrap/Offcanvas";
+import { Link } from "react-router-dom";
 
 import { CartItem } from "../Components/CartItem";
 import { useSelector, useDispatch } from "react-redux";
 import { formatCurrency } from "../utilities/formatCurrency";
+import { proceedCheckOut } from "../redux/cartSlice";
 
 export default function Cart() {
+  const isLoggedin = useSelector((state) => state.user.isLoggedin);
+  const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
   console.log(cart);
   const [show, setShow] = useState(false);
@@ -69,9 +73,20 @@ export default function Cart() {
               Total {formatCurrency(cart.totalCartPrice)}
             </div>
           </Stack>
-          <Button variant="outline-success" size="sm">
-            Proceed to Check Out
-          </Button>
+          {cart.totalQuantity > 0 && (
+            <Button
+              variant="outline-success"
+              size="sm"
+              as={Link}
+              to={isLoggedin ? "/checkout" : "/login"}
+              onClick={() => {
+                setShow(false);
+                dispatch(proceedCheckOut());
+              }}
+            >
+              Proceed to Check Out
+            </Button>
+          )}
         </Offcanvas.Body>
       </Offcanvas>
     </>

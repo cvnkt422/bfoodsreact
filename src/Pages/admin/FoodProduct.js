@@ -86,13 +86,6 @@ function FoodProduct(props) {
     <Container>
       <h3 className="text-center"> Create Food Product </h3>
       <div className="d-flex justify-content-center">
-        <div className="mx-2">
-          <img
-            src={bfoodslogo}
-            alt="bfoodslog"
-            style={{ width: "500px", height: "500px" }}
-          />
-        </div>
         <Form style={{ width: "800px" }}>
           <Row className="mb-3">
             <Form.Group as={Col} md="4" controlId="catid">

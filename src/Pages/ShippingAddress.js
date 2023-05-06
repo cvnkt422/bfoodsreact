@@ -1,21 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-import { Form, Button, Row, Col } from "react-bootstrap";
+import { Form, Button, Row, Col, Container } from "react-bootstrap";
 import { Typeahead } from "react-bootstrap-typeahead";
-import FormContainer from "./FormContainer";
-import { useNavigate, Link, json } from "react-router-dom";
-import RegistrationSuccess from "./RegistrationSuccess";
-import config from "../config/config";
-import axios from "axios";
-
+import { Link } from "react-router-dom";
 import { validateForm } from "../service/FormValidator";
+import { useSelector, useDispatch } from "react-redux";
 
-export default function Register() {
-  const [form, setForm] = useState({});
+import { addShipAddr } from "../redux/cartSlice";
+import Payment from "./Payment";
+
+function ShippingAddress() {
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.user);
+  const showShipAddr = useSelector((state) => state.cart.showShipAddr);
+  const showPayment = useSelector((state) => state.cart.showPayment);
+
+  const [form, setForm] = useState(user.user);
   const [errors, setErros] = useState({});
-  const [registered, setRegistered] = useState(false);
-  var response;
-
+  const [show, setShow] = useState(false);
   const setField = (field, value) => {
     setForm({ ...form, [field]: value });
 
@@ -24,56 +27,23 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const formErros = validateForm(form);
-    if (Object.keys(formErros).length > 0) setErros(formErros);
-    else {
-      const { confirmpassword, ...payload } = form;
-      payload.dob = +Date.parse(payload.dob);
-      payload.country = payload.country[0];
-      payload.role = "User";
-      console.log(JSON.stringify(payload));
-      let url = config.url;
-      // const response = await axios.post(`${url}/users/register/`, payload);
-
-      try {
-        response = await axios.post(`${url}/users/register/`, payload);
-
-        // Work with the response...
-      } catch (error) {
-        if (error.response) {
-          console.log(error.response);
-          response = error.response;
-          console.log(response.data);
-          setErros(response.data);
-        } else if (error.request) {
-          response = error.request;
-          console.log("printing error request", error);
-        } else {
-          // Anything else
-          console.log(error);
-        }
-      }
-
-      if (response.status === 201) setRegistered(true);
+    console.log(formErros);
+    if (Object.keys(formErros).length > 3) {
+      setErros(formErros);
+    } else {
+      dispatch(addShipAddr(form));
+      setShow(true);
     }
   };
 
   return (
-    <div className="p-1 my-2">
-      {registered && (
-        <RegistrationSuccess
-          name={form.name}
-          username={form.username}
-          gender={form.gender}
-        />
-      )}
-      {!registered && (
-        <div>
-          <h5 className="text-center mt-2">
-            For New Registration , Please Fill below Details
-          </h5>
-          <FormContainer>
+    <div>
+      <Container>
+        {showPayment && <Payment />}
+        {showShipAddr && (
+          <div>
+            <h5 className="text-center mt-2">Enter Shipping Address</h5>
             <Form className="">
               <Row className="mb-3">
                 <Form.Group as={Col} controlId="name">
@@ -85,7 +55,7 @@ export default function Register() {
                     type="text"
                     placeholder="Enter Name"
                     name="name"
-                    value={form.name}
+                    value={form.name === "undefined" ? null : form.name}
                     required
                     onChange={(e) => {
                       setField("name", e.target.value.toUpperCase());
@@ -99,12 +69,12 @@ export default function Register() {
 
                 <Form.Group as={Col} controlId="username">
                   <Form.Label>
-                    User Name{" "}
+                    Nick Name{" "}
                     <span style={{ color: "red", fontSize: "15px" }}>*</span>
                   </Form.Label>
                   <Form.Control
                     type="text"
-                    placeholder="username"
+                    placeholder="Nick Name"
                     name="username"
                     value={form.username}
                     required
@@ -115,104 +85,6 @@ export default function Register() {
                   />
                   <Form.Control.Feedback type="invalid">
                     {errors.username}
-                  </Form.Control.Feedback>
-                </Form.Group>
-              </Row>
-
-              <Row className="mb-3">
-                <Form.Label>
-                  PassWord
-                  <span style={{ color: "red", fontSize: "15px" }}>*</span>
-                </Form.Label>
-                <Form.Group as={Col} controlId="password">
-                  <Form.Control
-                    type="password"
-                    placeholder="New Password"
-                    name="password"
-                    value={form.password}
-                    required
-                    onChange={(e) => {
-                      setField("password", e.target.value);
-                    }}
-                    isInvalid={!!errors.password}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.password}
-                  </Form.Control.Feedback>
-                </Form.Group>
-
-                <Form.Group as={Col} controlId="confirmpassword">
-                  <Form.Control
-                    type="password"
-                    placeholder="Confirm password"
-                    name="confirmpassword"
-                    value={form.confirmpassword}
-                    required
-                    onChange={(e) => {
-                      setField("confirmpassword", e.target.value);
-                    }}
-                    isInvalid={!!errors.confirmpassword}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.confirmpassword}
-                  </Form.Control.Feedback>
-                </Form.Group>
-              </Row>
-
-              <Row className="mb-3">
-                <Form.Group as={Col} controlId="gender">
-                  <Form.Label>
-                    Gender{" "}
-                    <span style={{ color: "red", fontSize: "15px" }}>*</span>
-                  </Form.Label>
-                  <br />
-                  <Form.Check
-                    label="Male"
-                    name="gender"
-                    required
-                    inline
-                    type="radio"
-                    value="Male"
-                    onChange={(e) => {
-                      setField("gender", e.target.value);
-                    }}
-                    isInvalid={!!errors.gender}
-                  />
-                  <Form.Check
-                    label="Female"
-                    name="gender"
-                    value="Female"
-                    required
-                    inline
-                    type="radio"
-                    onChange={(e) => {
-                      setField("gender", e.target.value);
-                    }}
-                    isInvalid={!!errors.gender}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.gender}
-                  </Form.Control.Feedback>
-                </Form.Group>
-
-                <Form.Group as={Col} controlId="dob">
-                  <Form.Label>
-                    Date of Birth{" "}
-                    <span style={{ color: "red", fontSize: "15px" }}>*</span>
-                  </Form.Label>
-                  <Form.Control
-                    type="date"
-                    placeholder="Date of Birth"
-                    name="dob"
-                    value={form.dob}
-                    required
-                    onChange={(e) => {
-                      setField("dob", e.target.value);
-                    }}
-                    isInvalid={!!errors.dob}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.dob}
                   </Form.Control.Feedback>
                 </Form.Group>
               </Row>
@@ -294,6 +166,7 @@ export default function Register() {
 
                 <Form.Group as={Col} md="3" controlId="country">
                   <Typeahead
+                    //  selected={[form.country]}
                     id="country"
                     name="country"
                     value={form.country}
@@ -307,7 +180,7 @@ export default function Register() {
                       "China",
                     ]}
                     onChange={(selected) => {
-                      setField("country", selected);
+                      setField("country", selected[0]);
                     }}
                     isInvalid={!!errors.country}
                     //maxLength={10}
@@ -362,62 +235,27 @@ export default function Register() {
                 </Form.Group>
               </Row>
 
-              <Row className="mb-3">
-                <Form.Group as={Col} controlId="aadhar">
-                  <Form.Label>Aadhar</Form.Label>
-                  <Form.Control
-                    type="Number"
-                    placeholder="Aadhar Number"
-                    name="aadhar"
-                    value={form.aadhar}
-                    //required
-                    onChange={(e) => {
-                      setField("aadhar", e.target.value);
-                    }}
-                    isInvalid={!!errors.aadhar}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.aadhar}
-                  </Form.Control.Feedback>
-                </Form.Group>
-
-                <Form.Group as={Col} controlId="pan">
-                  <Form.Label>PAN</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="PAN Number"
-                    name="pan"
-                    value={form.pan}
-                    required
-                    onChange={(e) => {
-                      setField("pan", e.target.value.toUpperCase());
-                    }}
-                    isInvalid={!!errors.pan}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.pan}
-                  </Form.Control.Feedback>
-                </Form.Group>
-              </Row>
               <Row className="float-end">
                 <Form.Group controlId="submit">
-                  <Link className="btn btn-danger my-2 mx-2" to="/login">
+                  <Link className="btn btn-danger my-2 mx-2" to="/home">
                     Cancel
                   </Link>
                   <Button
-                    type="submit"
                     onClick={handleSubmit}
                     className="my-2"
-                    variant="primary"
+                    to="/payment"
+                    variant="outline-success"
                   >
-                    Register
+                    Proceed to Payment
                   </Button>
                 </Form.Group>
               </Row>
             </Form>
-          </FormContainer>
-        </div>
-      )}
+          </div>
+        )}
+      </Container>
     </div>
   );
 }
+
+export default ShippingAddress;

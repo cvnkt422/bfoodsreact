@@ -11,6 +11,8 @@ import Register from "./Pages/Register";
 import FoodCategory from "./Pages/admin/FoodCategory";
 
 import FoodProductList from "./Pages/admin/FoodProductList";
+import ShippingAddress from "./Pages/ShippingAddress";
+import Payment from "./Pages/Payment";
 
 function App() {
   return (
@@ -21,13 +23,18 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route
           path="/home"
-          element={<FoodProductList role="user" cat="all" />}
+          element={<FoodProductList role="user" filter={false} />}
         />
         <Route path="/" element={<Home />} />
 
         <Route path="/adduser" element={<Register />} />
         <Route path="/foodcategory" element={<FoodCategory />} />
-        <Route path="/foodproduct" element={<FoodProductList role="admin" />} />
+        <Route
+          path="/foodproduct"
+          element={<FoodProductList role="admin" filter={false} />}
+        />
+        <Route path="/checkout" element={<ShippingAddress />} />
+        <Route path="/payment" element={<Payment />} />
       </Routes>
     </>
   );

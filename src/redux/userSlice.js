@@ -2,18 +2,40 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const userSlice = createSlice({
   name: "user",
-  initialState: {},
+  initialState: {
+    user: {
+      address1: "",
+      city: "",
+      country: "",
+      email: "",
+      gender: "",
+      mobile: "",
+      name: "",
+      pin: "",
+      state: "",
+      username: "",
+    },
+    isLoggedin: false,
+  },
   reducers: {
     login: (state, action) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      console.log(action.payload);
       state.user = action.payload;
+      state.isLoggedin = true;
     },
     logout: (state) => {
-      state.user = null;
+      state.isLoggedin = false;
+      state.user = {
+        address1: "",
+        city: "",
+        country: "",
+        email: "",
+        gender: "",
+        mobile: "",
+        name: "",
+        pin: "",
+        state: "",
+        username: "",
+      };
     },
   },
 });

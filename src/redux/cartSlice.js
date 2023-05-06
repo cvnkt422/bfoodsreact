@@ -14,9 +14,25 @@ export const cartSlice = createSlice({
         base64Image: "",
       },
     ],
+
     totalQuantity: 0,
     totalCartPrice: 0,
     showCart: false,
+    shipAddr: {
+      address1: "",
+      city: "",
+      country: "",
+      email: "",
+      gender: "",
+      mobile: "",
+      name: "",
+      pin: "",
+      state: "",
+      username: "",
+    },
+    showShipAddr: true,
+    showPayment: false,
+    filter: false,
   },
   reducers: {
     addCart: (state, action) => {
@@ -64,10 +80,44 @@ export const cartSlice = createSlice({
       state.cart = null;
       state.totalQuantity = 0;
       state.totalCartPrice = 0;
+      state.cart = [
+        {
+          id: "",
+          name: "",
+          desc: "",
+          price: 0,
+          totalItemPrice: 0,
+          quantity: 0,
+          base64Image: "",
+        },
+      ];
+    },
+
+    addShipAddr: (state, action) => {
+      console.log(action.payload);
+      state.shipAddr = action.payload;
+      state.showPayment = true;
+      state.showShipAddr = false;
+    },
+
+    proceedCheckOut: (state) => {
+      state.showPayment = false;
+      state.showShipAddr = true;
+    },
+
+    filterProducts: (state) => {
+      state.filter = false;
     },
   },
 });
 
-export const { addCart, removeCart, emptyCart } = cartSlice.actions;
+export const {
+  addCart,
+  removeCart,
+  emptyCart,
+  addShipAddr,
+  proceedCheckOut,
+  filterProducts,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;

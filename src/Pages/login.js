@@ -68,9 +68,6 @@ export default function Login() {
       <div>
         <br />
         <br />
-        <br />
-        <br />
-        <br />
       </div>
 
       <div className="d-flex bd-highlight">
@@ -83,7 +80,7 @@ export default function Login() {
         </div>
         <div
           className="flex-fill bd-highlight align-self-center"
-          style={{ minWidth: "450px" }}
+          style={{ minWidth: "400px" }}
         >
           <div className="d-flex flex-column mx-4">
             <Form>
@@ -159,27 +156,14 @@ export default function Login() {
               </div>
             </Form>
             <div>{showerror && <Error show={showerror} />}</div>
-            <div>
-              <div className="float-end">
-                <span className="mx-2">Dont have Account ?</span>
-                <Link
-                  to="/adduser"
-                  className="btn btn-sm"
-                  style={{ backgroundColor: "skyblue", width: "5rem" }}
-                >
-                  Signup
-                </Link>
-              </div>
-            </div>
+
             <div>
               <div className="float-end mt-1">
                 <span className="mx-2">Forgot Password ?</span>
-                <Link
-                  to="/adduser"
-                  className="btn btn-sm"
-                  style={{ backgroundColor: "skyblue", width: "5rem" }}
-                >
-                  Reset
+                <Link to="/adduser">
+                  <Button variant="outline-success" size="sm">
+                    Reset
+                  </Button>
                 </Link>
               </div>
             </div>
