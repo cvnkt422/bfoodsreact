@@ -33,7 +33,7 @@ const axiosservice = async (method, path, data) => {
 };
 
 const fetchCategories = async () => {
-  const result = await axiosservice("GET", "product/fetchCategories/", "");
+  const result = await axiosservice("GET", "admin/fetchAllCategories/", "");
   return result.data;
 };
 
