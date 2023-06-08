@@ -7,6 +7,7 @@ import ProductItem from "./ProductItem";
 import ViewProduct from "../ViewProduct";
 
 import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
 
 function FoodProductList(props) {
   const isFilter = useSelector((state) => state.cart.filter);
@@ -32,7 +33,10 @@ function FoodProductList(props) {
   };
 
   const fetchProducts = async () => {
+    //const prods = await axiosservice("GET", "admin/getProducts/", "");
+
     const prods = await axiosservice("GET", "admin/getProducts/", "");
+
     setProducts(prods.data);
     setFilteredproducts(prods.data);
   };

@@ -1,3 +1,5 @@
+import axios from "axios";
+
 import React, { useState, useEffect } from "react";
 import { Form, Button, Row, Col, Container } from "react-bootstrap";
 import { axiosservice } from "../../service/axiosService";
@@ -61,14 +63,11 @@ function FoodProduct(props) {
       payload.append("desc", form.desc);
       payload.append("discount", form.disc);
       payload.append("image", imagedata);
+      payload.append("quantity", 100);
 
       console.log(payload);
 
-      const result = await axiosservice(
-        "POST",
-        "admin/createProduct/",
-        payload
-      );
+      const result = await axiosservice("POST", "admin/createProduct", payload);
 
       console.log(result);
       // console.log(fetchCategories());

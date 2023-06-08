@@ -108,7 +108,7 @@ function FoodCategory() {
 
                         <td>
                           <Button
-                            class="btn btn-danger btn-sm"
+                            class="btn btn-sm btn-danger"
                             data-id={cat.id}
                             onClick={(e) => {
                               console.log(
@@ -123,7 +123,7 @@ function FoodCategory() {
                         </td>
                         <td>
                           <Button
-                            class="btn btn-warning btn-sm"
+                            className="btn btn-sm btn-success"
                             data-id={cat.id}
                             data-name={cat.name}
                             onClick={(e) =>

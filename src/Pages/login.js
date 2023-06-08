@@ -195,9 +195,12 @@ export default function Login() {
 
         <div className="flex-fill bd-highlight align-self-center">
           <div className="d-flex flex-column">
-            <div className="btn btn-sm">
+            <a
+              className="btn btn-sm"
+              href="http://localhost:9090/authenticate/login"
+            >
               <img src={gmail} alt="gmail" />
-            </div>
+            </a>
 
             <div className="btn btn-sm">
               <img src={facebook} alt="facebook" />

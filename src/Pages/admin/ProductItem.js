@@ -28,7 +28,7 @@ function ProductItem(prop) {
             </Card.Title>
             <Card.Subtitle
               className=""
-              style={{ fontSize: "0.8rem", height: "1.5rem" }}
+              style={{ fontSize: "0.8rem", height: "2.5rem" }}
             >
               {prop.product.desc}
             </Card.Subtitle>
@@ -36,7 +36,7 @@ function ProductItem(prop) {
               <span
                 className=""
                 style={{
-                  fontSize: "0.8rem",
+                  fontSize: "0.5rem",
                   marginTop: "10rem",
                   color: "pink",
                 }}
