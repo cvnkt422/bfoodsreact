@@ -16,7 +16,7 @@ function ProductItem(prop) {
           handleSubmit(e.currentTarget.getAttribute("data-id"));
         }}
       >
-        <Card className="mx-4" style={{ width: "15rem", height: "15rem" }}>
+        <Card className="mx-2" style={{ width: "15rem", height: "15rem" }}>
           <Card.Img
             variant="top"
             src={`data:JPG;base64,${prop.product.base64Image}`}

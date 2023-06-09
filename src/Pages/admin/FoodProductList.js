@@ -75,7 +75,7 @@ function FoodProductList(props) {
                   {categories &&
                     categories.map((cat, index) => (
                       <Nav.Link onClick={(e) => filterProducts(cat.id)}>
-                        {cat.name}
+                        <span>{cat.name}</span>
                       </Nav.Link>
                     ))}
                 </Nav>
@@ -86,20 +86,37 @@ function FoodProductList(props) {
         {true && (
           <div className="d-flex flex-grow-1 bd-highlight">
             <div className="d-flex flex-column">
-              <div className="mx-4">
-                <h3 className="text-center"> Displaying {} Food Items</h3>
+              <div className="mx-1">
+                <h4 className="text-center mb-2">
+                  Today Deliverable Food Items
+                </h4>
               </div>
-              {props.role === "admin" && (
-                <div>
+              <div className="d-flex bd-highlight mx-2 flex-wrap">
+                {props.role === "admin" && (
                   <Button
-                    className="btn btn-sm btn-success float-end mx-2 mt-2 mb-2"
+                    className="btn btn-sm btn-success mx-4"
                     onClick={() => updatePages(false, true, false)}
                   >
                     Create New Product
                   </Button>
-                </div>
-              )}
-              <div className="d-flex bd-highlight mx-4 flex-wrap">
+                )}
+              </div>
+              <div>
+                {showcreate && <FoodProduct updatePages={updatePages} />}
+              </div>
+              <div>
+                {showprod && (
+                  <div className="d-flex bd-highlight mt-4 mx-4">
+                    <ViewProduct
+                      updatePages={updatePages}
+                      prod={filteredproducts.filter(
+                        (product) => product.id === +selprod
+                      )}
+                    />
+                  </div>
+                )}
+              </div>
+              <div className="d-flex bd-highlight mx-2 flex-wrap">
                 {filteredproducts &&
                   filteredproducts.map((product, index) => (
                     <ProductItem
@@ -110,21 +127,8 @@ function FoodProductList(props) {
                   ))}
               </div>
             </div>
-            {showprod && (
-              <div className="d-flex bd-highlight mt-4">
-                <Container>
-                  <ViewProduct
-                    updatePages={updatePages}
-                    prod={filteredproducts.filter(
-                      (product) => product.id === +selprod
-                    )}
-                  />
-                </Container>
-              </div>
-            )}
           </div>
         )}
-        {showcreate && <FoodProduct updatePages={updatePages} />}
       </div>
     </>
   );

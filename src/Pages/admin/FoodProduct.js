@@ -82,9 +82,8 @@ function FoodProduct(props) {
   //////////  Submit handling end ////////////////
 
   return (
-    <Container>
-      <h3 className="text-center"> Create Food Product </h3>
-      <div className="d-flex justify-content-center">
+    <div>
+      <div className="d-flex justify-content-start mx-4 mt-2">
         <Form style={{ width: "800px" }}>
           <Row className="mb-3">
             <Form.Group as={Col} md="4" controlId="catid">
@@ -298,7 +297,7 @@ function FoodProduct(props) {
           </Row>
         </Form>
       </div>
-    </Container>
+    </div>
   );
 }
 
