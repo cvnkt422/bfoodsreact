@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Container, Col, Button, Alert } from "react-bootstrap";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +9,11 @@ function ViewProduct(props) {
   const dispatch = useDispatch();
   const [btnState, setBtnState] = useState(true);
   const cart = useSelector((state) => state.cart);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [props]);
+
   if (
     cart.cart.find((item) => item.id === props.prod[0].id) !== undefined &&
     btnState

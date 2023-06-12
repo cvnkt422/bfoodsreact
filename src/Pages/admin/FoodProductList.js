@@ -95,7 +95,10 @@ function FoodProductList(props) {
                 {props.role === "admin" && (
                   <Button
                     className="btn btn-sm btn-success mx-4"
-                    onClick={() => updatePages(false, true, false)}
+                    onClick={() => {
+                      window.scrollTo(0, 0);
+                      updatePages(false, true, false);
+                    }}
                   >
                     Create New Product
                   </Button>

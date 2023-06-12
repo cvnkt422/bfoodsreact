@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import { GoogleLogin, GoogleLogout } from "google-login-react";
+
 import { useNavigate, Link } from "react-router-dom";
 
 import { Form, Button, Row, Col, Container } from "react-bootstrap";
@@ -16,6 +18,26 @@ import { login } from "../redux/userSlice";
 import Error from "../errors/error";
 
 export default function Login() {
+  const [showloginButton, setShowloginButton] = useState(true);
+  const [showlogoutButton, setShowlogoutButton] = useState(false);
+  const clientId = "";
+  const onLoginSuccess = (res) => {
+    console.log("Login Success:", res.profileObj);
+    setShowloginButton(false);
+    setShowlogoutButton(true);
+  };
+
+  const onLoginFailure = (res) => {
+    console.log("Login Failed:", res);
+  };
+
+  const onSignoutSuccess = () => {
+    alert("You have been logged out successfully");
+    console.clear();
+    setShowloginButton(true);
+    setShowlogoutButton(false);
+  };
+
   const dispatch = useDispatch();
   let navigate = useNavigate();
   const [form, setForm] = useState({});
@@ -71,13 +93,13 @@ export default function Login() {
       </div>
 
       <div className="d-flex bd-highlight">
-        <div className="flex-fill bd-highlight mx-4">
+        {/* <div className="flex-fill bd-highlight mx-4">
           <img
             src={logo1}
             alt="logo1"
             style={{ width: "500px", height: "500px" }}
           ></img>
-        </div>
+        </div> */}
         <div
           className="flex-fill bd-highlight align-self-center"
           style={{ minWidth: "400px" }}
@@ -192,7 +214,7 @@ export default function Login() {
           </div>
           <div class="vr mt-1 mx-4" style={{ height: "215px", width: "2px" }} />
         </div>
-
+        {/* 
         <div className="flex-fill bd-highlight align-self-center">
           <div className="d-flex flex-column">
             <a
@@ -206,6 +228,23 @@ export default function Login() {
               <img src={facebook} alt="facebook" />
             </div>
           </div>
+        </div> */}
+
+        <div>
+          {showloginButton ? (
+            <GoogleLogin
+              clientId={clientId}
+              buttonText="Sign In"
+              onSuccess={onLoginSuccess}
+              onFailure={onLoginFailure}
+              cookiePolicy={"single_host_origin"}
+              isSignedIn={true}
+              style={{
+                position: "absolute",
+                fontSize: "40rem",
+              }}
+            />
+          ) : null}
         </div>
       </div>
     </Container>
