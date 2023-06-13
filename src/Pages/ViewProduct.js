@@ -4,6 +4,7 @@ import { Row, Container, Col, Button, Alert } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 
 import { addCart, removeCart } from "../redux/cartSlice";
+import Cart from "./Cart";
 
 function ViewProduct(props) {
   const dispatch = useDispatch();
@@ -27,12 +28,10 @@ function ViewProduct(props) {
     setBtnState(true);
 
   const addToCart = () => {
-    console.log("addtocart clicked");
     dispatch(addCart(props.prod[0]));
   };
 
   const deleteFromCart = () => {
-    console.log("Removed from Cart");
     dispatch(removeCart(props.prod[0]));
   };
 
@@ -72,6 +71,7 @@ function ViewProduct(props) {
                 Add to Cart
               </Button>
             </div>
+
             <Button
               variant="outline-danger"
               size="sm"
@@ -81,6 +81,15 @@ function ViewProduct(props) {
             >
               Remove
             </Button>
+          </div>
+
+          <div className="d-flex justify-content-center mt-1">
+            {cart.cart.filter((a) => a.id === props.prod[0].id)[0] && (
+              <span className="p-1 text-success">
+                {cart.cart.filter((a) => a.id === props.prod[0].id)[0].quantity}
+                <span> </span>items added to cart
+              </span>
+            )}
           </div>
 
           <div
