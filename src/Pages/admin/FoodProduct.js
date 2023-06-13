@@ -6,11 +6,11 @@ import { axiosservice } from "../../service/axiosService";
 import bfoodslogo from "../../static/images/Logo1.jpg";
 
 function FoodProduct(props) {
-  const [form, setForm] = useState({});
+  const [form, setForm] = useState(props.form && props.form[0]);
   const [errors, setErros] = useState({});
   const [foodcat, setFoodcat] = useState([]);
   const [showPreview, setShowPreview] = useState(false);
-  const [image, setImage] = useState(undefined);
+  const [image, setImage] = useState();
   const [imagedata, setImagedata] = useState();
 
   const loadCategories = async () => {
@@ -18,27 +18,30 @@ function FoodProduct(props) {
     setFoodcat(result.data);
   };
 
+  console.log(form);
+
   useEffect(() => {
     loadCategories();
   }, []);
 
   const setField = (field, value) => {
     setForm({ ...form, [field]: value });
-
     if (!!errors[field]) setErros({ ...errors, [field]: null });
   };
 
   ////// Validating Form ///////////////
 
   const validateForm = () => {
-    const { name, catid, utype, unit, price } = form;
+    console.log(form);
+    console.log(imagedata);
+    const { name, category, units, unitType, price } = form;
     const newErrors = {};
 
     if (!name || name === "") newErrors.name = "Enter Product Name";
-    if (!catid || catid === "") newErrors.catid = "Select Category";
-    if (!utype || utype === "") newErrors.utype = "Select Unit type";
-    if (!unit || unit === "") newErrors.unit = "Enter Unit Value";
-    if (!price || price === "") newErrors.price = "Enter Price per Unit";
+    if (!category || category === "") newErrors.catid = "Select Category";
+    if (!unitType || unitType === "") newErrors.units = "Select units type";
+    if (!units || units === "") newErrors.units = "Enter units Value";
+    if (!price || price === "") newErrors.price = "Enter Price per units";
     return newErrors;
   };
 
@@ -52,16 +55,21 @@ function FoodProduct(props) {
     const formErros = validateForm();
     if (Object.keys(formErros).length > 0) setErros(formErros);
     else {
+      console.log("form data", form);
       const payload = new FormData();
+      payload.append("id", form.id ? form.id : 0);
       payload.append("name", form.name);
-      payload.append("category", form.catid);
-      payload.append("unitType", form.utype);
-      payload.append("units", form.unit);
+      payload.append("category", form.category);
+      payload.append("unitType", form.unitType);
+      payload.append("units", form.units);
       payload.append("price", form.price);
       payload.append("desc", form.desc);
-      payload.append("discount", form.disc);
+      payload.append("discount", form.discount);
       payload.append("image", imagedata);
-      payload.append("quantity", 100);
+      payload.append("quantity", form.quantity);
+      payload.append("available", form.available);
+
+      console.log("payload Data", payload);
 
       const result = await axiosservice("POST", "admin/createProduct", payload);
 
@@ -85,14 +93,15 @@ function FoodProduct(props) {
                 <span style={{ color: "red", fontSize: "15px" }}>*</span>
               </Form.Label>
               <Form.Select
-                id="catid"
-                name="catid"
-                value={form.catid}
+                id="category"
+                name="category"
+                value={form && form.category}
                 placeholder="Choose Main Category"
                 onChange={(e) => {
-                  setField("catid", e.target.value);
+                  setField("category", e.target.value);
                 }}
-                isInvalid={!!errors.catid}
+                isInvalid={!!errors.category}
+                defaultValue={form && form.category}
                 //maxLength={10}
               >
                 <option value="">--Select--</option>
@@ -104,7 +113,7 @@ function FoodProduct(props) {
                   ))}
               </Form.Select>
               <Form.Control.Feedback type="invalid">
-                {errors.catid}
+                {errors.category}
               </Form.Control.Feedback>
             </Form.Group>
             <Form.Group as={Col} controlId="name">
@@ -116,7 +125,7 @@ function FoodProduct(props) {
                 type="text"
                 placeholder="Dosa,Biryani etc.."
                 name="name"
-                value={form.name}
+                value={form && form.name}
                 required
                 onChange={(e) => {
                   setField("name", e.target.value);
@@ -129,19 +138,20 @@ function FoodProduct(props) {
             </Form.Group>
           </Row>
           <Row className="mb-3">
-            <Form.Group as={Col} md="4" controlId="catid">
+            <Form.Group as={Col} md="4" controlId="unitType">
               <Form.Label>
-                Food Units
+                Food Unit Type
                 <span style={{ color: "red", fontSize: "15px" }}>*</span>
               </Form.Label>
               <Form.Select
-                id="utype"
-                name="utype"
-                value={form.utype}
+                id="unitType"
+                name="unitType"
+                value={form && form.unitType}
                 onChange={(e) => {
-                  setField("utype", e.target.value);
+                  setField("unitType", e.target.value);
                 }}
-                isInvalid={!!errors.utype}
+                isInvalid={!!errors.unitType}
+                defaultValue={form && form.unitType}
                 //maxLength={10}
               >
                 <option value="">--Select--</option>
@@ -152,27 +162,28 @@ function FoodProduct(props) {
                 <option value="NA">NA</option>
               </Form.Select>
               <Form.Control.Feedback type="invalid">
-                {errors.utype}
+                {errors.units}
               </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group as={Col} controlId="name">
+            <Form.Group as={Col} controlId="units">
               <Form.Label>
-                Food Unit Value
+                Food units Value
                 <span style={{ color: "red", fontSize: "15px" }}>*</span>
               </Form.Label>
               <Form.Control
                 type="text"
                 placeholder="500 grams, 1 Kg etc.."
-                name="unit"
-                value={form.unit}
+                name="units"
+                value={form && form.units}
                 required
                 onChange={(e) => {
-                  setField("unit", e.target.value);
+                  setField("units", e.target.value);
                 }}
-                isInvalid={!!errors.unit}
+                isInvalid={!!errors.units}
+                defaultValue={form && form.units}
               />
               <Form.Control.Feedback type="invalid">
-                {errors.unit}
+                {errors.units}
               </Form.Control.Feedback>
             </Form.Group>
             <Form.Group as={Col} controlId="name">
@@ -184,7 +195,7 @@ function FoodProduct(props) {
                 type="number"
                 placeholder="Enter Price"
                 name="price"
-                value={form.price}
+                value={form && form.price}
                 required
                 onChange={(e) => {
                   setField("price", e.target.value);
@@ -195,26 +206,73 @@ function FoodProduct(props) {
                 {errors.price}
               </Form.Control.Feedback>
             </Form.Group>
+
+            <Form.Group as={Col} controlId="quantity">
+              <Form.Label>
+                Quantity
+                <span style={{ color: "red", fontSize: "15px" }}>*</span>
+              </Form.Label>
+              <Form.Control
+                type="number"
+                placeholder="Quantity"
+                name="quantity"
+                value={form && form.quantity}
+                required
+                onChange={(e) => {
+                  setField("quantity", e.target.value);
+                }}
+                isInvalid={!!errors.quantity}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.quantity}
+              </Form.Control.Feedback>
+            </Form.Group>
           </Row>
 
           <Row className="mb-3">
-            <Form.Group as={Col} md={4} controlId="name">
+            <Form.Group as={Col} md={4} controlId="discount">
               <Form.Label>Discount%</Form.Label>
               <Form.Control
                 type="number"
                 placeholder="Discount in %"
-                name="disc"
-                value={form.disc}
+                name="discount"
+                value={form && form.discount}
                 required
                 onChange={(e) => {
-                  setField("disc", e.target.value);
+                  setField("discount", e.target.value);
                 }}
-                isInvalid={!!errors.disc}
+                isInvalid={!!errors.discount}
               />
               <Form.Control.Feedback type="invalid">
-                {errors.disc}
+                {errors.discount}
               </Form.Control.Feedback>
             </Form.Group>
+
+            <Form.Group as={Col} md="4" controlId="available">
+              <Form.Label>
+                Available Today ?
+                <span style={{ color: "red", fontSize: "15px" }}>*</span>
+              </Form.Label>
+              <Form.Select
+                id="available"
+                name="available"
+                value={form && form.available}
+                onChange={(e) => {
+                  setField("available", e.target.value);
+                }}
+                isInvalid={!!errors.available}
+                defaultValue={form && form.available}
+                //maxLength={10}
+              >
+                <option value="">--Select--</option>
+                <option value="Yes">Available</option>
+                <option value="No">Not Available</option>
+              </Form.Select>
+              <Form.Control.Feedback type="invalid">
+                {errors.available}
+              </Form.Control.Feedback>
+            </Form.Group>
+
             <Form.Group as={Col} controlId="name">
               <Form.Label>
                 Image
@@ -224,7 +282,6 @@ function FoodProduct(props) {
                 type="file"
                 placeholder="Choose Image"
                 name="image"
-                value={form.image}
                 required
                 onChange={(e) => {
                   setImage(URL.createObjectURL(e.target.files[0]));
@@ -246,12 +303,13 @@ function FoodProduct(props) {
                 rows={3}
                 id="desc"
                 name="desc"
-                value={form.desc}
+                value={form && form.desc}
                 placeholder="please let foodie know about the food item"
                 onChange={(e) => {
                   setField("desc", e.target.value);
                 }}
                 isInvalid={!!errors.desc}
+                defaultValue={form && form.desc}
                 //maxLength={10}
               ></Form.Control>
               <Form.Control.Feedback type="invalid">

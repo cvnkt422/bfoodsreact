@@ -12,6 +12,10 @@ import axios from "axios";
 function FoodProductList(props) {
   const isFilter = useSelector((state) => state.cart.filter);
 
+  const user = useSelector((state) => state.user.user);
+
+  console.log(user);
+
   const [showprods, setShowprods] = useState(true);
   const [showcreate, setShowcreate] = useState(false);
   const [showprod, setShowprod] = useState(false);
@@ -33,9 +37,13 @@ function FoodProductList(props) {
   };
 
   const fetchProducts = async () => {
-    //const prods = await axiosservice("GET", "admin/getProducts/", "");
-
-    const prods = await axiosservice("GET", "admin/getProducts/", "");
+    const prods = await axiosservice(
+      "GET",
+      user.username === "ADMIN"
+        ? `admin/getAllProducts/`
+        : `admin/getActiveProducts/`,
+      ""
+    );
 
     setProducts(prods.data);
     setFilteredproducts(prods.data);
@@ -52,7 +60,7 @@ function FoodProductList(props) {
   useEffect(() => {
     fetchCategories();
     fetchProducts();
-  }, [filter]);
+  }, [filter, showprods]);
   return (
     <>
       <div
@@ -110,12 +118,23 @@ function FoodProductList(props) {
               <div>
                 {showprod && (
                   <div className="d-flex bd-highlight mt-4 mx-4">
-                    <ViewProduct
-                      updatePages={updatePages}
-                      prod={filteredproducts.filter(
-                        (product) => product.id === +selprod
-                      )}
-                    />
+                    {user.username !== "ADMIN" && (
+                      <ViewProduct
+                        updatePages={updatePages}
+                        prod={filteredproducts.filter(
+                          (product) => product.id === +selprod
+                        )}
+                      />
+                    )}
+
+                    {showprod && user.username === "ADMIN" && (
+                      <FoodProduct
+                        form={filteredproducts.filter(
+                          (product) => product.id === +selprod
+                        )}
+                        updatePages={updatePages}
+                      />
+                    )}
                   </div>
                 )}
               </div>
