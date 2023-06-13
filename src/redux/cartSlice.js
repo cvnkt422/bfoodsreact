@@ -54,7 +54,6 @@ export const cartSlice = createSlice({
           base64Image: action.payload.base64Image,
         });
       }
-      console.log(newItem);
     },
     removeCart: (state, action) => {
       const newItem = action.payload;
@@ -62,8 +61,6 @@ export const cartSlice = createSlice({
       const objIndex = state.cart.findIndex((obj) => obj.id === newItem.id);
 
       if (objIndex !== -1) {
-        console.log("Before update: ", [objIndex]);
-
         if (state.cart[objIndex].quantity !== -1) {
           state.cart[objIndex].quantity--;
           state.cart[objIndex].totalItemPrice =
@@ -94,7 +91,6 @@ export const cartSlice = createSlice({
     },
 
     addShipAddr: (state, action) => {
-      console.log(action.payload);
       state.shipAddr = action.payload;
       state.showPayment = true;
       state.showShipAddr = false;

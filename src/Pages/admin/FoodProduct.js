@@ -16,7 +16,6 @@ function FoodProduct(props) {
   const loadCategories = async () => {
     const result = await axiosservice("GET", "admin/fetchAllCategories/", "");
     setFoodcat(result.data);
-    console.log(result.data[0].name);
   };
 
   useEffect(() => {
@@ -49,7 +48,6 @@ function FoodProduct(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(form);
 
     const formErros = validateForm();
     if (Object.keys(formErros).length > 0) setErros(formErros);
@@ -65,12 +63,7 @@ function FoodProduct(props) {
       payload.append("image", imagedata);
       payload.append("quantity", 100);
 
-      console.log(payload);
-
       const result = await axiosservice("POST", "admin/createProduct", payload);
-
-      console.log(result);
-      // console.log(fetchCategories());
 
       if (result.status === 201) {
         props.updatePages(true, false, false);

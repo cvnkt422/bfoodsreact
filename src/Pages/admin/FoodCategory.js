@@ -44,13 +44,10 @@ function FoodCategory() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(form);
 
     const formErros = validateForm();
     if (Object.keys(formErros).length > 0) setErros(formErros);
     else {
-      console.log(JSON.stringify(form));
-
       let payload = form;
 
       const result = await axiosservice(
@@ -58,9 +55,6 @@ function FoodCategory() {
         "admin/createcategory/",
         payload
       );
-
-      console.log(result);
-      console.log(fetchCategories);
 
       if (result.status === 201) setShowcreate(false);
       setCategories(await fetchCategories());
@@ -111,10 +105,6 @@ function FoodCategory() {
                             class="btn btn-sm btn-danger"
                             data-id={cat.id}
                             onClick={(e) => {
-                              console.log(
-                                "delete",
-                                e.target.getAttribute("data-id")
-                              );
                               delCat(e.target.getAttribute("data-id"));
                             }}
                           >

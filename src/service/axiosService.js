@@ -19,12 +19,10 @@ const axiosservice = async (method, path, data) => {
     });
   } catch (error) {
     if (error.response) {
-      console.log(error.response);
       response = error.response;
     } else if (error.request) {
       response = error.request;
       response.status = 404;
-      console.log("printing error request", error);
     } else {
       response.data = "not_found";
     }

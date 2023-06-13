@@ -21,22 +21,6 @@ export default function Login() {
   const [showloginButton, setShowloginButton] = useState(true);
   const [showlogoutButton, setShowlogoutButton] = useState(false);
   const clientId = "";
-  const onLoginSuccess = (res) => {
-    console.log("Login Success:", res.profileObj);
-    setShowloginButton(false);
-    setShowlogoutButton(true);
-  };
-
-  const onLoginFailure = (res) => {
-    console.log("Login Failed:", res);
-  };
-
-  const onSignoutSuccess = () => {
-    alert("You have been logged out successfully");
-    console.clear();
-    setShowloginButton(true);
-    setShowlogoutButton(false);
-  };
 
   const dispatch = useDispatch();
   let navigate = useNavigate();
@@ -51,20 +35,17 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(form);
+
     setShowerror(false);
     const formErros = validateForm();
     if (Object.keys(formErros).length > 0) setErros(formErros);
     else {
       const auth = await axiosservice("POST", "authentication/", form);
 
-      console.log(typeof auth.status, auth.status);
       if (auth.status === 202) {
-        console.log(auth.data);
         dispatch(login(auth.data));
         navigate("/home");
       } else {
-        console.log("error");
         setShowerror(true);
       }
     }
@@ -214,38 +195,22 @@ export default function Login() {
           </div>
           <div class="vr mt-1 mx-4" style={{ height: "215px", width: "2px" }} />
         </div>
-        {/* 
-        <div className="flex-fill bd-highlight align-self-center">
-          <div className="d-flex flex-column">
-            <a
-              className="btn btn-sm"
-              href="http://localhost:9090/authenticate/login"
-            >
-              <img src={gmail} alt="gmail" />
-            </a>
+        {
+          <div className="flex-fill bd-highlight align-self-center">
+            <div className="d-flex flex-column">
+              <a
+                className="btn btn-sm"
+                href="http://localhost:9090/authenticate/login"
+              >
+                <img src={gmail} alt="gmail" />
+              </a>
 
-            <div className="btn btn-sm">
-              <img src={facebook} alt="facebook" />
+              <div className="btn btn-sm">
+                <img src={facebook} alt="facebook" />
+              </div>
             </div>
           </div>
-        </div> */}
-
-        <div>
-          {showloginButton ? (
-            <GoogleLogin
-              clientId={clientId}
-              buttonText="Sign In"
-              onSuccess={onLoginSuccess}
-              onFailure={onLoginFailure}
-              cookiePolicy={"single_host_origin"}
-              isSignedIn={true}
-              style={{
-                position: "absolute",
-                fontSize: "40rem",
-              }}
-            />
-          ) : null}
-        </div>
+        }
       </div>
     </Container>
   );

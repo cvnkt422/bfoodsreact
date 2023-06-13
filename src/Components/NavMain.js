@@ -21,24 +21,10 @@ function NavMain() {
   const isLoggedin = useSelector((state) => state.user.isLoggedin);
   const [searchTag, setSearchTag] = useState("");
 
-  console.log(user);
-  console.log(cart);
-
   const prodSearch = async () => {
-    console.log(searchTag);
     const products = await axiosservice("POST", "admin/searchProducts/", {
       searchTag: searchTag,
     });
-
-    console.log(products.data);
-    // if (auth.status === 202) {
-    //  console.log(auth.data);
-    // dispatch(login(auth.data));
-    //navigate("/home");
-    // } else {
-    // console.log("error");
-    //setShowerror(true);
-    //}
   };
 
   return (

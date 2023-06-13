@@ -12,7 +12,6 @@ export default function Cart() {
   const isLoggedin = useSelector((state) => state.user.isLoggedin);
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
-  console.log(cart);
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);

@@ -28,7 +28,7 @@ function ShippingAddress() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formErros = validateForm(form);
-    console.log(formErros);
+
     if (Object.keys(formErros).length > 3) {
       setErros(formErros);
     } else {

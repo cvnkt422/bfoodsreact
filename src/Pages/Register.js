@@ -32,7 +32,7 @@ export default function Register() {
       payload.dob = +Date.parse(payload.dob);
       payload.country = payload.country[0];
       payload.role = "User";
-      console.log(JSON.stringify(payload));
+
       let url = config.url;
       // const response = await axios.post(`${url}/users/register/`, payload);
 
@@ -42,16 +42,13 @@ export default function Register() {
         // Work with the response...
       } catch (error) {
         if (error.response) {
-          console.log(error.response);
           response = error.response;
-          console.log(response.data);
+
           setErros(response.data);
         } else if (error.request) {
           response = error.request;
-          console.log("printing error request", error);
         } else {
           // Anything else
-          console.log(error);
         }
       }
 

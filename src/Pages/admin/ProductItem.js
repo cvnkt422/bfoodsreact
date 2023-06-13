@@ -4,7 +4,6 @@ function ProductItem(prop) {
   const handleSubmit = async (id) => {
     await prop.setSelprod(id);
     await prop.updatePages(false, false, true);
-    console.log("clicked", id);
   };
 
   return (
