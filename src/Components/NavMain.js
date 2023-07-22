@@ -62,17 +62,18 @@ function NavMain() {
                 Pending Orders
               </NavDropdown.Item>
             </NavDropdown>
-            {user.username === "ADMIN" && (
-              <NavDropdown title="Food Master" id="navbarScrollingDropdown">
-                <NavDropdown.Item as={Link} to="/foodcategory">
-                  Food Main Category
-                </NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item as={Link} to="/foodproduct">
-                  Food Product
-                </NavDropdown.Item>
-              </NavDropdown>
-            )}
+            {user.username === "ADMIN" ||
+              (true && (
+                <NavDropdown title="Food Master" id="navbarScrollingDropdown">
+                  <NavDropdown.Item as={Link} to="/foodcategory">
+                    Food Main Category
+                  </NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item as={Link} to="/foodproduct">
+                    Food Product
+                  </NavDropdown.Item>
+                </NavDropdown>
+              ))}
           </Nav>
           <Form className="d-flex">
             <Form.Control

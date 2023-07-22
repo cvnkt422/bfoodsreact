@@ -13,6 +13,9 @@ import FoodCategory from "./Pages/admin/FoodCategory";
 import FoodProductList from "./Pages/admin/FoodProductList";
 import ShippingAddress from "./Pages/ShippingAddress";
 import Payment from "./Pages/Payment";
+import OAuthSuccess from "./Pages/OAuthSuccess";
+
+import OAuthLogin from "./Pages/GoogleOAuth/OAuthLogin";
 
 function App() {
   return (
@@ -20,12 +23,14 @@ function App() {
       <NavMain />
 
       <Routes>
+        {/* <Route path="/login" element={<Login />} /> */}
         <Route path="/login" element={<Login />} />
         <Route
           path="/home"
           element={<FoodProductList role="user" filter={false} />}
         />
         <Route path="/" element={<Home />} />
+        <Route path="/oauthsuc" element={<OAuthSuccess />} />
 
         <Route path="/adduser" element={<Register />} />
         <Route path="/foodcategory" element={<FoodCategory />} />

@@ -1,5 +1,7 @@
 import Card from "react-bootstrap/Card";
 
+import React, { Component } from "react";
+
 function ProductItem(prop) {
   const handleSubmit = async (id) => {
     await prop.setSelprod(id);

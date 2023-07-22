@@ -16,14 +16,20 @@ export const userSlice = createSlice({
       username: "",
     },
     isLoggedin: false,
+    id_token: "",
   },
   reducers: {
     login: (state, action) => {
       state.user = action.payload;
       state.isLoggedin = true;
     },
+    gOAuthLogin: (state, action) => {
+      state.id_token = action.payload;
+      state.isLoggedin = true;
+    },
     logout: (state) => {
       state.isLoggedin = false;
+      state.id_token = "";
       state.user = {
         address1: "",
         city: "",
@@ -35,12 +41,13 @@ export const userSlice = createSlice({
         pin: "",
         state: "",
         username: "",
+        id_token: "",
       };
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { login, logout } = userSlice.actions;
+export const { login, logout, gOAuthLogin } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -14,6 +14,8 @@ function FoodProductList(props) {
 
   const user = useSelector((state) => state.user.user);
 
+  const token = useSelector((state) => state.user.id_token);
+
   console.log(user);
 
   const [showprods, setShowprods] = useState(true);
@@ -32,7 +34,12 @@ function FoodProductList(props) {
   };
 
   const fetchCategories = async () => {
-    const result = await axiosservice("GET", "admin/fetchAllCategories/", "");
+    const result = await axiosservice(
+      "GET",
+      "admin/fetchAllCategories/",
+      "",
+      token
+    );
     setCategories(result.data);
   };
 
@@ -42,7 +49,8 @@ function FoodProductList(props) {
       user.username === "ADMIN"
         ? `admin/getAllProducts/`
         : `admin/getActiveProducts/`,
-      ""
+      "",
+      token
     );
 
     setProducts(prods.data);

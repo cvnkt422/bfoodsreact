@@ -1,6 +1,6 @@
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
 import React, { useState } from "react";
-
-import { GoogleLogin, GoogleLogout } from "google-login-react";
 
 import { useNavigate, Link } from "react-router-dom";
 
@@ -13,7 +13,9 @@ import { axiosservice } from "../service/axiosService";
 
 import { useDispatch } from "react-redux";
 
-import { login } from "../redux/userSlice";
+import GAuth from "./GAuth";
+
+import { login, gOAuthLogin } from "../redux/userSlice";
 
 import Error from "../errors/error";
 
@@ -40,7 +42,7 @@ export default function Login() {
     const formErros = validateForm();
     if (Object.keys(formErros).length > 0) setErros(formErros);
     else {
-      const auth = await axiosservice("POST", "authentication/", form);
+      const auth = await axiosservice("POST", "users/auth/", form);
 
       if (auth.status === 202) {
         dispatch(login(auth.data));
@@ -56,8 +58,7 @@ export default function Login() {
 
     const { email, password } = form;
 
-    const emailValidator =
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const emailValidator = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     if (!email || email === "" || !emailValidator.test(email))
       newErrors.email = "Enter Valid Email";
@@ -70,6 +71,7 @@ export default function Login() {
     <Container>
       <div>
         <br />
+
         <br />
       </div>
 
@@ -170,6 +172,23 @@ export default function Login() {
                 </Link>
               </div>
             </div>
+            <div>
+              <div className="float-end mt-1">
+                <GoogleOAuthProvider clientId="711943192186-sngn4rt48fl80suoe365l7i01e61utt8.apps.googleusercontent.com">
+                  <GoogleLogin
+                    onSuccess={(credentialResponse) => {
+                      console.log(credentialResponse.credential);
+                      dispatch(gOAuthLogin(credentialResponse.credential));
+                      navigate("/home");
+                    }}
+                    onError={() => {
+                      console.log("Login Failed");
+                    }}
+                    // useOneTap
+                  ></GoogleLogin>
+                </GoogleOAuthProvider>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -177,26 +196,26 @@ export default function Login() {
           <br />
         </div>
 
-        <div className="flex-fill bd-highlight mx-4">
-          <div class="vr mt-1 mx-4" style={{ height: "215px", width: "2px" }} />
+        {/* <div className="flex-fill bd-highlight mx-4">
+            <div class="vr mt-1 mx-4" style={{ height: "215px", width: "2px" }} />
 
-          <div>
-            <Button
-              style={{
-                width: "3em",
-                height: "3rem",
-                position: "relative",
-              }}
-              variant="info"
-              className="rounded-circle"
-            >
-              Or
-            </Button>
-          </div>
-          <div class="vr mt-1 mx-4" style={{ height: "215px", width: "2px" }} />
-        </div>
-        {
-          <div className="flex-fill bd-highlight align-self-center">
+            <div>
+              <Button
+                style={{
+                  width: "3em",
+                  height: "3rem",
+                  position: "relative",
+                }}
+                variant="info"
+                className="rounded-circle"
+              >
+                Or
+              </Button>
+            </div>
+            <div class="vr mt-1 mx-4" style={{ height: "215px", width: "2px" }} />
+          </div> */}
+
+        {/* <div className="flex-fill bd-highlight align-self-center">
             <div className="d-flex flex-column">
               <a
                 className="btn btn-sm"
@@ -205,12 +224,13 @@ export default function Login() {
                 <img src={gmail} alt="gmail" />
               </a>
 
+              <GAuth />
+
               <div className="btn btn-sm">
                 <img src={facebook} alt="facebook" />
               </div>
             </div>
-          </div>
-        }
+          </div> */}
       </div>
     </Container>
   );

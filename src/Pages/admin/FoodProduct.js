@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Form, Button, Row, Col, Container } from "react-bootstrap";
 import { axiosservice } from "../../service/axiosService";
 import bfoodslogo from "../../static/images/Logo1.jpg";
@@ -13,8 +14,15 @@ function FoodProduct(props) {
   const [image, setImage] = useState();
   const [imagedata, setImagedata] = useState();
 
+  const token = useSelector((state) => state.user.id_token);
+
   const loadCategories = async () => {
-    const result = await axiosservice("GET", "admin/fetchAllCategories/", "");
+    const result = await axiosservice(
+      "GET",
+      "admin/fetchAllCategories/",
+      "",
+      token
+    );
     setFoodcat(result.data);
   };
 
@@ -71,7 +79,12 @@ function FoodProduct(props) {
 
       console.log("payload Data", payload);
 
-      const result = await axiosservice("POST", "admin/createProduct", payload);
+      const result = await axiosservice(
+        "POST",
+        "admin/createProduct",
+        payload,
+        token
+      );
 
       if (result.status === 201) {
         props.updatePages(true, false, false);

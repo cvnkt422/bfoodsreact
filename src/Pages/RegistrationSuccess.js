@@ -1,5 +1,6 @@
 import Alert from "react-bootstrap/Alert";
 import { useNavigate, Link, json } from "react-router-dom";
+import React, { Component } from "react";
 
 function RegistrationSuccess(user) {
   return (
